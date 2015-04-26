@@ -1,8 +1,6 @@
 angular.module('songhop.controllers', ['ionic', 'songhop.services'])
 
 
-FUCK 
-
 //Discover Controller
 //Discover Controller
 //Discover Controller
@@ -109,10 +107,29 @@ FUCK
 //Splash Controller
 //Splash Controller
 //Splash Controller
-.controller('splashCtrl',function($scope){
-    
+.controller('TabsCtrl', function($scope, $window, User, Recommendations) {
+  // expose the number of new favorites to the scope
+  $scope.favCount = User.favoriteCount;
 
-});
+  // method to reset new favorites to 0 when we click the fav tab
+  $scope.enteringFavorites = function() {
+    User.newFavorites = 0;
+    Recommendations.haltAudio();
+  }
+
+  $scope.leavingFavorites = function() {
+    Recommendations.init();
+  }
+
+  $scope.logout = function() {
+    User.destroySession();
+
+    // instead of using $state.go, we're going to redirect.
+    // reason: we need to ensure views aren't cached.
+    $window.location.href = '/';
+  }
+
+})
 
 
 
