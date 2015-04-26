@@ -86,21 +86,30 @@ angular.module('songhop.controllers', ['ionic', 'songhop.services'])
 })
 
 
-//Tabs Controller
-//Tabs Controller
-//Tabs Controller
-.controller('TabsCtrl', function($scope, User, Recommendations) {
-    
-    $scope.enteringFavorites = function(){
-        Recommendations.haltAudio();
-        User.newFavorites = 0;
-    }
-    
-    $scope.leavingFavorites = function(){
-        Recommendations.init();
-    };
-    
-    $scope.favCount = User.favoriteCount;
+/*
+Controller for our tab bar
+*/
+.controller('TabsCtrl', function($scope, $window, User, Recommendations) {
+  // expose the number of new favorites to the scope
+  $scope.favCount = User.favoriteCount;
+
+  // method to reset new favorites to 0 when we click the fav tab
+  $scope.enteringFavorites = function() {
+    User.newFavorites = 0;
+    Recommendations.haltAudio();
+  }
+
+  $scope.leavingFavorites = function() {
+    Recommendations.init();
+  }
+
+  $scope.logout = function() {
+    User.destroySession();
+
+    // instead of using $state.go, we're going to redirect.
+    // reason: we need to ensure views aren't cached.
+    $window.location.href = '/';
+  }
 
 })
 
