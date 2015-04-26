@@ -77,19 +77,22 @@ angular.module('songhop.controllers', ['ionic', 'songhop.services'])
 
 
 
-//Favorites Controller
-//Favorites Controller
-//Favorites Controller
+/*
+Controller for the favorites page
+*/
 .controller('FavoritesCtrl', function($scope, $window, User) {
-    $scope.favorites = User.favorites;
-     
-    $scope.removeSong = function(song,index){
-        User.removeSongFromFavorites(song,index);
-    };
-    
-    $scope.openSong = function(song){
-        $window.open(song.open_url,"_system")
-    };
+  // get the list of our favorites from the user service
+  $scope.favorites = User.favorites;
+  $scope.username = User.username;
+
+  $scope.removeSong = function(song, index) {
+    User.removeSongFromFavorites(song, index);
+  }
+
+  $scope.openSong = function(song) {
+    $window.open(song.open_url, "_system");
+  }
+
 })
 
 
