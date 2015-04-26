@@ -1,11 +1,11 @@
-// Ionic Starter App
+// Ionic Starter App - FINAL
 
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 angular.module('songhop', ['ionic', 'songhop.controllers'])
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, $rootScope, $state, User) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -23,13 +23,28 @@ angular.module('songhop', ['ionic', 'songhop.controllers'])
 
 .config(function($stateProvider, $urlRouterProvider) {
 
-  // Ionic uses AngularUI Router, which uses the concept of states.
-  // Learn more here: https://github.com/angular-ui/ui-router.
-  // Set up the various states in which the app can be.
-  // Each state's controller can be found in controllers.js.
-    
+  // Ionic uses AngularUI Router which uses the concept of states
+  // Learn more here: https://github.com/angular-ui/ui-router
+  // Set up the various states which the app can be in.
+  // Each state's controller can be found in controllers.js
   $stateProvider
 
+<<<<<<< HEAD
+=======
+
+  // splash page
+  .state('splash', {
+    url: '/',
+    templateUrl: 'templates/splash.html',
+    controller: 'SplashCtrl',
+    onEnter: function($state, User){
+      User.checkSession().then(function(hasSession) {
+        if (hasSession) $state.go('tab.discover');
+      });
+    }
+  })
+
+>>>>>>> source
   // setup an abstract state for the tabs directive
   .state('tab', {
     url: '/tab',
@@ -39,8 +54,9 @@ angular.module('songhop', ['ionic', 'songhop.controllers'])
     // don't load the state until we've populated our User, if necessary.
     resolve: {
       populateSession: function(User) {
-            return true
-          //return User.checkSession();
+
+        return User.checkSession();
+
       }
     },
     onEnter: function($state, User){
@@ -70,25 +86,12 @@ angular.module('songhop', ['ionic', 'songhop.controllers'])
           controller: 'FavoritesCtrl'
         }
       }
-  })
-  
-  // splash page
-  .state('splash', {
-    url: '/',
-    templateUrl: 'templates/splash.html',
-    controller: 'SplashCtrl',
-    onEnter: function($state, User){
-      User.checkSession().then(function(hasSession) {
-        if (hasSession) $state.go('tab.discover');
-      });
-    }
-  })
-  
-  
-  // If none of the above states are matched, use this as the fallback:
+    })
+  // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/');
 
 })
+
 
 .constant('SERVER', {
   // Local server
@@ -97,5 +100,3 @@ angular.module('songhop', ['ionic', 'songhop.controllers'])
   // Public Heroku server
   url: 'https://ionic-songhop.herokuapp.com'
 });
-
-

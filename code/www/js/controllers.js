@@ -1,9 +1,11 @@
+//SOURCE CODE - FINAL
 
 angular.module('songhop.controllers', ['ionic', 'songhop.services'])
 
-//Discover Controller
-//Discover Controller
-//Discover Controller
+
+/*
+Controller for the discover page
+*/
 .controller('DiscoverCtrl', function($scope, $ionicLoading, $timeout, Recommendations, User) {
 
   // helper functions for loading
@@ -80,9 +82,11 @@ angular.module('songhop.controllers', ['ionic', 'songhop.services'])
 
 
 
-//Favorites Controller
-//Favorites Controller
-//Favorites Controller
+
+
+/*
+Controller for the favorites page
+*/
 .controller('FavoritesCtrl', function($scope, $window, User) {
   // get the list of our favorites from the user service
   $scope.favorites = User.favorites;
@@ -136,37 +140,10 @@ $scope.logout = function() {
 
 })
 
-//Tabs Controller
-//Tabs Controller
-//Tabs Controller
-.controller('TabsCtrl', function($scope, $window, User, Recommendations) {
-  // expose the number of new favorites to the scope
-  $scope.favCount = User.favoriteCount;
 
-  // method to reset new favorites to 0 when we click the fav tab
-  $scope.enteringFavorites = function() {
-    User.newFavorites = 0;
-    Recommendations.haltAudio();
-  }
-
-  $scope.leavingFavorites = function() {
-    Recommendations.init();
-  }
-
-  $scope.logout = function() {
-    User.destroySession();
-
-    // instead of using $state.go, we're going to redirect.
-    // reason: we need to ensure views aren't cached.
-    $window.location.href = '/';
-  }
-
-})
-
-
-//Splash Controller
-//Splash Controller
-//Splash Controller
+/*
+Controller for the splash page
+*/
 .controller('SplashCtrl', function($scope, $state, User) {
 
   // get the list of our favorites from the user service
@@ -183,16 +160,3 @@ $scope.logout = function() {
   }
 
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
