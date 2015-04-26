@@ -58,6 +58,15 @@ angular.module('songhop.services', ['ionic.utils'])
     // set data in localstorage object
     $localstorage.setObject('user', { username: username, session_id: session_id });
   }
+  
+   // wipe out our session data
+  o.destroySession = function() {
+    $localstorage.setObject('user', {});
+    o.username = false;
+    o.session_id = false;
+    o.favorites = [];
+    o.newFavorites = 0;
+  }
     
     
      // check if there's a user session present

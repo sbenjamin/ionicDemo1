@@ -30,16 +30,28 @@ angular.module('songhop', ['ionic', 'songhop.controllers'])
     
   $stateProvider
 
-  // Set up an abstract state for the tabs directive:
+  // setup an abstract state for the tabs directive
   .state('tab', {
     url: '/tab',
     abstract: true,
     templateUrl: 'templates/tabs.html',
-    controller: 'TabsCtrl'
+    controller: 'TabsCtrl',
+    // don't load the state until we've populated our User, if necessary.
+    resolve: {
+      populateSession: function(User) {
+            return true
+          //return User.checkSession();
+      }
+    },
+    onEnter: function($state, User){
+      User.checkSession().then(function(hasSession) {
+        if (!hasSession) $state.go('splash');
+      });
+    }
   })
-
+  
+  
   // Each tab has its own nav history stack:
-
   .state('tab.discover', {
     url: '/discover',
     views: {
