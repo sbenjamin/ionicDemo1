@@ -1,7 +1,9 @@
 
 angular.module('songhop.controllers', ['ionic', 'songhop.services'])
 
-
+//Discover Controller
+//Discover Controller
+//Discover Controller
 .controller('DiscoverCtrl', function($scope, $ionicLoading, $timeout, Recommendations, User) {
 
   // helper functions for loading
@@ -78,9 +80,9 @@ angular.module('songhop.controllers', ['ionic', 'songhop.services'])
 
 
 
-/*
-Controller for the favorites page
-*/
+//Favorites Controller
+//Favorites Controller
+//Favorites Controller
 .controller('FavoritesCtrl', function($scope, $window, User) {
   // get the list of our favorites from the user service
   $scope.favorites = User.favorites;
@@ -124,9 +126,9 @@ Controller for our tab bar
 
 })
 
-//Splash Controller
-//Splash Controller
-//Splash Controller
+//Tabs Controller
+//Tabs Controller
+//Tabs Controller
 .controller('TabsCtrl', function($scope, $window, User, Recommendations) {
   // expose the number of new favorites to the scope
   $scope.favCount = User.favoriteCount;
@@ -151,6 +153,26 @@ Controller for our tab bar
 
 })
 
+
+//Splash Controller
+//Splash Controller
+//Splash Controller
+.controller('SplashCtrl', function($scope, $state, User) {
+
+  // get the list of our favorites from the user service
+  $scope.submitForm = function(username, signingUp) {
+    User.auth(username, signingUp).then(function(){
+      // session is now set, so lets redirect to discover page
+      $state.go('tab.discover');
+
+    }, function() {
+      // error handling here
+      alert('Hmm... try another username.');
+
+    });
+  }
+
+});
 
 
 
