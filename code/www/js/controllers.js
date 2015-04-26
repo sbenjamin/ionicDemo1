@@ -1,73 +1,80 @@
 angular.module('songhop.controllers', ['ionic', 'songhop.services'])
 
 
-//Discover Controller
-//Discover Controller
-//Discover Controller
-.controller('DiscoverCtrl', function($scope, $timeout, $ionicLoading, User, Recommendations) {
-    console.log('DiscoverCtrl');
-    
-    
-    var showLoading = function(){
-        $ionicLoading.show({
-            template : '<i class="ion-loading-c"></i>',
-            noBackdrop : false
-        });
-    };
-    
-    var hideLoading = function(){
-        $ionicLoading.hide();
-    };
-    
-    // set loading to true first time while we retrieve songs from server.
-    showLoading();
-    
-    
-    Recommendations.getNextSongs().then(function(){
-        $scope.currentSong = Recommendations.queue[0];
-    });
-    
-    //sendFeedback
-    $scope.sendFeedback = function(bool){
-        console.log('sendFeedback:', bool);
-        
-        if(bool){
-            User.addSongToFavorites($scope.currentSong);
-        }
-        
-        $scope.currentSong.rated = bool;
-        $scope.currentSong.hide = true;
-     
-        $scope.nextImage = Recommendations.nextSong();
-        console.log('nextImage',$scope.nextImage);
-        
-        $timeout(function(){
-            $scope.currentSong = Recommendations.queue[0];
-            $scope.currentSong.loaded = false;
-        },250);
-        
-        Recommendations.playCurrentSong().then(function(){
-            $scope.currentSong.loaded = true;
-        });
-    };
+.controller('DiscoverCtrl', function($scope, $ionicLoading, $timeout, Recommendations, User) {
 
-    $scope.nextAlbumImg = function(){
-        console.log('nextAlbumImg');
-        if(Recommendations.queue.length > 1){
-            return Recommendations.queue[1].image_large;
-        }
-        return '';
-    };
-    
-    Recommendations.init().then(function(){
-        $scope.currentSong = Recommendations.queue[0];
-        return Recommendations.playCurrentSong();
-    }).then(function(){
-        hideLoading();
-        $scope.currentSong.loaded = true;
+  // helper functions for loading
+  var showLoading = function() {
+    $ionicLoading.show({
+      template: '<i class="ion-loading-c"></i>',
+      noBackdrop: true
     });
-    
+  }
+
+  var hideLoading = function() {
+    $ionicLoading.hide();
+  }
+
+
+  // set loading to true first time while we retrieve songs from server.
+  showLoading();
+
+  // first we'll need to initialize the Rec service, get our first songs, etc
+  Recommendations.init()
+    .then(function(){
+
+      $scope.currentSong = Recommendations.queue[0];
+
+      return Recommendations.playCurrentSong();
+
+    })
+    .then(function(){
+      // turn loading off
+      hideLoading();
+      $scope.currentSong.loaded = true;
+    });
+
+
+  // fired when we favorite / skip a song.
+  $scope.sendFeedback = function (bool) {
+
+    // first, add to favorites if they favorited
+    if (bool) User.addSongToFavorites($scope.currentSong);
+
+    // set variable for the correct animation sequence
+    $scope.currentSong.rated = bool;
+    $scope.currentSong.hide = true;
+
+    // prepare the next song
+    Recommendations.nextSong();
+
+    // update current song in scope, timeout to allow animation to complete
+    $timeout(function() {
+      $scope.currentSong = Recommendations.queue[0];
+      $scope.currentSong.loaded = false;
+
+    }, 250);
+
+    Recommendations.playCurrentSong().then(function() {
+      $scope.currentSong.loaded = true;
+
+    });
+
+  }
+
+
+  // used for retrieving the next album image.
+  // if there isn't an album image available next, return empty string.
+  $scope.nextAlbumImg = function() {
+    if (Recommendations.queue.length > 1) {
+      return Recommendations.queue[1].image_large;
+    }
+
+    return '';
+  }
+
 })
+
 
 
 //Favorites Controller
